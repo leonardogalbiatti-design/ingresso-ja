@@ -931,3 +931,196 @@ ol {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============ 4) ANIMAÇÕES ============ */
+
+/* --- TRANSIÇÕES: mudança suave entre dois estados (normal -> hover) ---
+   Sem transition, o navegador troca o estilo de uma vez (fica "seco").
+   Com transition, ele calcula os quadros intermediários.
+   Sintaxe: transition: propriedade duração curva;
+   Dica: coloque a transition no estado NORMAL do elemento (não no :hover),
+   assim ela vale na ida e na volta. */
+.menu ul a {
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid transparent;
+  transition: color var(--tempo-transicao) var(--suave), border-color var(--tempo-transicao) var(--suave);
+}
+
+.menu ul a:hover {
+  color: var(--cor-destaque);
+  border-bottom-color: var(--cor-destaque);
+}
+
+.rodape a,
+.filtros a {
+  transition: color var(--tempo-transicao) var(--suave), background-color var(--tempo-transicao) var(--suave);
+}
+
+.rodape a:hover {
+  color: var(--cor-destaque);
+}
+
+.filtros a:hover {
+  background-color: var(--cor-primaria);
+  color: var(--cor-branca);
+}
+
+.botao {
+  transition: transform var(--tempo-transicao) var(--suave), background-color var(--tempo-transicao) var(--suave), color var(--tempo-transicao) var(--suave), box-shadow var(--tempo-lento) var(--suave); /* várias propriedades separadas por vírgula */
+}
+
+.botao:hover {
+  transform: translateY(-3px); /* translateY negativo move o elemento para cima */
+  box-shadow: 0 8px 18px rgba(255, 122, 26, 0.4);
+}
+
+.botao:active {
+  transform: scale(0.97);
+  box-shadow: none;
+  transition-duration: 0.1s;
+}
+
+.botao-contorno:hover {
+  background-color: var(--cor-branca);
+  color: var(--cor-primaria);
+  box-shadow: none;
+}
+
+.botao-secundario:hover {
+  background-color: var(--cor-primaria-escura);
+  box-shadow: 0 8px 18px rgba(42, 15, 85, 0.4);
+}
+
+.card,
+.passos li {
+  transition: transform var(--tempo-lento) var(--suave), box-shadow var(--tempo-lento) var(--suave);
+}
+
+.card:hover {
+  transform: translateY(-6px); /* o card sobe */
+  box-shadow: 0 18px 36px rgba(75, 30, 140, 0.25);
+}
+
+.passos li:hover {
+  transform: translateY(-4px);
+}
+
+.card h3 {
+  transition: color var(--tempo-transicao) var(--suave);
+}
+
+.card:hover h3 {
+  color: var(--cor-primaria);
+}
+
+.card-imagem img,
+.categoria img {
+  transition: transform 0.8s var(--suave); /* a foto cresce mais devagar que o card */
+}
+
+.card:hover .card-imagem img,
+.categoria:hover img {
+  transform: scale(1.05); /* scale aumenta (1 = tamanho original); o overflow hidden do pai corta o excesso */
+}
+
+.categoria span {
+  transition: background-color var(--tempo-transicao) var(--suave), color var(--tempo-transicao) var(--suave);
+}
+
+.categoria:hover span {
+  background-color: var(--cor-destaque);
+  color: var(--cor-primaria-escura);
+}
+
+/* --- @KEYFRAMES: animação com etapas, que roda sozinha (sem precisar de hover) ---
+   1) @keyframes nome { from {...} to {...} } descreve o começo e o fim.
+   2) animation: nome duração curva; aplica a animação em um elemento.
+   animation-delay espera antes de começar; "both" mantém o estado inicial durante a espera
+   e o estado final depois que termina. */
+@keyframes entrada-logo {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulsar {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* O logo entra pela lateral */
+.logo {
+  animation: entrada-logo 0.8s var(--entrada) both;
+}
+
+/* O hero entra em sequência: cada item espera um pouco (animation-delay).
+   O "both" mantém o item escondido durante a espera e visível no final. */
+.hero-texto .hero-tag,
+.hero-texto h1,
+.hero-texto p,
+.busca {
+  animation: subir 0.9s var(--entrada) both;
+}
+
+.hero-texto h1 {
+  animation-delay: 0.12s;
+}
+
+.hero-texto p {
+  animation-delay: 0.24s;
+}
+
+.busca {
+  animation-delay: 0.36s;
+}
+
+/* O link "Pular para o conteúdo" desliza para dentro da tela */
+.pular-conteudo {
+  transition: top var(--tempo-transicao) var(--suave);
+}
+
+/* O selo pulsa (infinite = repete para sempre) devagar para chamar atenção */
+.selo {
+  animation: pulsar 2.4s ease-in-out infinite;
+}
+
+.selo-esgotado {
+  animation: none;
+}
+
+/* Acessibilidade: quem pediu "reduzir movimento" no sistema não vê as animações
+   que rodam sozinhas (entrada e pulsar). O hover continua suave. */
+@media (prefers-reduced-motion: reduce) {
+  .logo,
+  .hero-texto .hero-tag,
+  .hero-texto h1,
+  .hero-texto p,
+  .busca,
+  .selo {
+    animation: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
